@@ -64,7 +64,7 @@ def main():
 
     Validate command line parameters and create a instance of
     Maincontroller class.
-    Then he validates input format and if it's ok the
+    Then he validates machine attributes parsed from file and if it's ok the
     Turing machine computation initializes.
     """
     if len(argv) != 3:
@@ -81,15 +81,18 @@ def main():
     print('\nLOG:\n')
     print('Parsing file')
     mc = Maincontroller(file, tape_content)
-    print('Validating')
+    print('File parsed')
+    print('Validating input file')
     try:
         validate = mc.validate()
         if validate != 0:
-            raise Exception("Input format invalid!")
+            raise Exception("Input file invalid!")
     except Exception as e:
         print(e)
         exit(1)
-
+    print('Input file validated')
+    print('Initializing Turing machine...')
+    print('\n\n')
     mc.init_turing()
 
 if __name__ == '__main__':

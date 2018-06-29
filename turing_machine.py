@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 
 from tape import Tape
+from copy import copy
 
 class TuringMachine(object):
     """
@@ -15,12 +16,12 @@ class TuringMachine(object):
             position 4: The initial state
             position 5: List of the final states
             position 6: Number of tapes (This Turing machine simulator currently accepts only single-tape machines)
-            position 7 to forward: Transactions in a list format that must be like:
-            position 0: Currently state
-            position 1: Next state
-            position 2: The symbol of tape in current position
-            position 3: The New symbol of tape in current position
-            position 4: The indication of movement (R to right, L to left and S to stay)
+            position 7 to forward: transitions in a list format that must be like:
+                position 0: Currently state
+                position 1: Next state
+                position 2: The symbol of tape in current position
+                position 3: The New symbol of tape in current position
+                position 4: The indication of movement (R to right, L to left and S to stay)
 
         tape_content is a String that represents the content on the tape at begin of Turing machine computing
     """
@@ -44,21 +45,23 @@ class TuringMachine(object):
         """
         self.print_information()
         queue = [[self.tape, self.init_state]]
+        print('Computing...')
         while queue:
             current = queue.pop()
             if current[1] in self.final_states:
-                print('Tape content: ', current[0].tape_content)
+                print('Tape content: ', ' '.join(current[0].tape_content))
                 print('Accepted')
                 exit(0)
 
             valid_transitions = self.valid_transitions(current[1], current[0])
 
             for transition in valid_transitions:
-                aux = self.aply_transaction(transition, current[0])
-                queue.append([current[0], aux])
-        print('Tape content: ', current[0].tape_content)
-        print('Rejected')
+                aux = self.aply_transition(transition, current[0])
+                queue.append(aux)
 
+        print('Tape content: ', ' '.join(current[0].tape_content))
+        print('Rejected')
+        exit(0)
 
 
     def validate_input(self):
@@ -76,7 +79,6 @@ class TuringMachine(object):
             6 if has no one final state detected
             7 if the quantity of tapes is different of 1
             8 if has no one transition detected
-            9 if an item of the input is not in tape alphabet
         """
         if self.input_alphabet == ['']:
             return 1
@@ -94,12 +96,10 @@ class TuringMachine(object):
             return 7
         if self.transictions == []:
             return 8
-        for character in list(self.tape_content):
-            if character not in self.tape_alphabet:
-                return 9
         return 0
 
     def print_information(self):
+        print('======= About this Turing machine =======')
         print('Input alphabet: ', self.input_alphabet)
         print('Tape alphabet: ', self.tape_alphabet)
         print('Blank symbol: ', self.blank_symbol)
@@ -107,11 +107,14 @@ class TuringMachine(object):
         print('Initial state: ', self.init_state)
         print('Final states: ', self.final_states)
         print('Quantity of tapes', self.qnt_tapes)
+        print('=========================================')
+        print('\n\n')
 
-    def aply_transaction(self, transition, tape):
-        tape.write(transition[3])
-        tape.move(transition[4])
-        return transition[1]
+    def aply_transition(self, transition, tape):
+        new_tape = copy(tape)
+        new_tape.write(transition[3])
+        new_tape.move(transition[4])
+        return [new_tape, transition[1]]
 
     def valid_transitions(self, state, tape):
         valid_transitions = []
