@@ -43,18 +43,22 @@ class TuringMachine(object):
         Initializes the Turing machine computing
         """
         self.print_information()
-        current_state = self.init_state
-        queue = [self.tape]
+        queue = [[self.tape, self.init_state]]
         while queue:
-            if current_state in self.final_states:
-                print(self.tape.tape_content)
-                print('Accept')
+            current = queue.pop()
+            if current[1] in self.final_states:
+                print('Tape content: ', current[0].tape_content)
+                print('Accepted')
                 exit(0)
 
-            valid_transitions = self.valid_transitions(current_state)
+            valid_transitions = self.valid_transitions(current[1], current[0])
 
             for transition in valid_transitions:
-                current_state = self.aply_transaction(transition)
+                aux = self.aply_transaction(transition, current[0])
+                queue.append([current[0], aux])
+        print('Tape content: ', current[0].tape_content)
+        print('Rejected')
+
 
 
     def validate_input(self):
@@ -72,6 +76,7 @@ class TuringMachine(object):
             6 if has no one final state detected
             7 if the quantity of tapes is different of 1
             8 if has no one transition detected
+            9 if an item of the input is not in tape alphabet
         """
         if self.input_alphabet == ['']:
             return 1
@@ -89,9 +94,9 @@ class TuringMachine(object):
             return 7
         if self.transictions == []:
             return 8
-        for character in list(self.tape_content)
-        if self.transictions == []:
-            return
+        for character in list(self.tape_content):
+            if character not in self.tape_alphabet:
+                return 9
         return 0
 
     def print_information(self):
@@ -103,15 +108,15 @@ class TuringMachine(object):
         print('Final states: ', self.final_states)
         print('Quantity of tapes', self.qnt_tapes)
 
-    def aply_transaction(self, transition):
-        self.tape.write(transition[3])
-        self.tape.move(transition[4])
+    def aply_transaction(self, transition, tape):
+        tape.write(transition[3])
+        tape.move(transition[4])
         return transition[1]
 
-    def valid_transitions(self, state):
+    def valid_transitions(self, state, tape):
         valid_transitions = []
         for transiction in self.transictions:
             if transiction[0] == state:
-                if self.tape.read() == transiction[2]:
+                if tape.read() == transiction[2]:
                     valid_transitions.append(transiction)
         return valid_transitions
