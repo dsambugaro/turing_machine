@@ -6,6 +6,14 @@ from copy import copy
 
 class TuringMachine(object):
     """
+    Executes Turing machine's computing, in a way that applies transitions and
+    puts every possible configuration from the current state in a queue.
+    Resolves transitions of each configuration of the queue, removing invalid
+    configurations and adding new configurations to the queue if necessary.
+    This process continues until the computing accepts or reject the entry.
+    This class also has a method, called validate_input, that when used checks
+    if the machine attributes are correct.
+
     TuringMachine(machine_config, tape_content)
 
         machine_config is a list of attributes of the Turing machine that must be like following:
