@@ -15,4 +15,4 @@ So if the input format is valid then the calculation of the Turing machine is in
 ## turing_machine.py 
 
 ## tape.py 
-The class tape simulates a tape of turing machine. Its operation simulates the movements of the tape: left, right or remain. He is also responsible for reading and writing on tape. When the head of the ribbon passes through one end then a white symbol is placed so that it remains an infinite ribbon.
+The class tape simulates a tape of turing machine. Its operation simulates the movements of the tape: left, right or remain. He is also responsible for reading and writing on tape. When the head of the ribbon passes through one end then a white symbol is placed so that it remains an infinite tape.
