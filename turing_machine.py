@@ -16,11 +16,11 @@ class TuringMachine(object):
             position 5: List of the final states
             position 6: Number of tapes (This Turing machine simulator currently accepts only single-tape machines)
             position 7 to forward: Transactions in a list format that must be like:
-                position 0: Currently state
-                position 1: Next state
-                position 2: The symbol of tape in current position
-                position 3: The New symbol of tape in current position
-                position 4: The indication of movement (R to right, L to left and S to stay)
+            position 0: Currently state
+            position 1: Next state
+            position 2: The symbol of tape in current position
+            position 3: The New symbol of tape in current position
+            position 4: The indication of movement (R to right, L to left and S to stay)
 
         tape_content is a String that represents the content on the tape at begin of Turing machine computing
     """
