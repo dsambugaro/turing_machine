@@ -1,16 +1,12 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+from copy import deepcopy
+
 from tape import Tape
-from copy import copy
 
 class TuringMachine(object):
     """
-    Executes Turing machine's computing, in a way that applies transitions and
-    puts every possible configuration from the current state in a queue.
-    Resolves transitions of each configuration of the queue, removing invalid
-    configurations and adding new configurations to the queue if necessary.
-    This process continues until the computing accepts or reject the entry.
     This class also has a method, called validate_input, that when used checks
     if the machine attributes are correct.
 
@@ -45,40 +41,73 @@ class TuringMachine(object):
         self.tape_content = tape_content
         self.tape = Tape(self.tape_content, self.blank_symbol)
 
-    def initialize_computing(self):
+    def execute_Turing_computing(self):
         """
-        initialize_computing()
+        execute_Turing_computing()
 
-        Initializes the Turing machine computing
+        Executes Turing machine's computing, in a way that applies transitions and
+        puts every possible configuration as of the current state in a queue.
+        Resolves transitions of each configuration of the queue, removing invalid
+        configurations and adding new configurations to the queue if necessary.
+        This process continues until the computing accepts or reject the entry and
+        prints current configuration.
+        If the turning computing reaches 500 iterations the program asks if you
+        want to continue the computation. If 'y', 'Y', 's' or 'S' is given, the
+        limit of iterations is doubled and the Turing computing continues otherwise
+        the Turing computing is ended and prints every configuration in the queue.
         """
-        self.print_information()
+        self._print_information()
         queue = [[self.tape, self.init_state]]
-        print('Computing...')
+        print('Computing...\n')
+        iterations = 0
+        iterations_limit = 500
         while queue:
+            iterations += 1
+            if iterations == iterations_limit:
+                print('Turing computing reached {} iterations.'.format(iterations_limit))
+                action = input('Do you want to continue? (y/N): ')
+                if action == 'y' or action == 'Y' or action == 's' or action == 'S':
+                    iterations_limit += iterations_limit
+                else:
+                    print('Current configurations: ')
+                    for i in range(len(queue)):
+                        print('\tConfiguration ', i+1)
+                        print('\t\tCurrent state: ', queue[i][1])
+                        print('\t\tReading head position: ', queue[i][0].reading_head)
+                        print('\t\tTape content: ', ' '.join(queue[i][0].tape_content))
+                    print('\n\n')
+                    exit(0)
+
             current = queue.pop()
             if current[1] in self.final_states:
+                print('Current state: ', current[1])
+                print('Reading Head position', current[0].reading_head)
                 print('Tape content: ', ' '.join(current[0].tape_content))
-                print('Accepted')
+                print('Code 0: Accepted')
+                print('\n\n')
                 exit(0)
 
-            valid_transitions = self.valid_transitions(current[1], current[0])
+            valid_transitions = self._valid_transitions(current[1], current[0])
 
             for transition in valid_transitions:
-                aux = self.aply_transition(transition, current[0])
-                queue.append(aux)
+                aux = self._apply_transition(transition, current[0])
+                queue.insert(len(queue)-1, aux)
 
+        print('Current state: ', current[1])
+        print('Reading Head position', current[0].reading_head)
         print('Tape content: ', ' '.join(current[0].tape_content))
-        print('Rejected')
-        exit(0)
+        print('Code 1: Rejected')
+        print('\n\n')
+        exit(1)
 
 
     def validate_input(self):
         """
         validate_input()
 
-        Input format validation
+        Input machine attributes validation
 
-        returns 0 if the input format is valid or one of the following for invalid:
+        returns 0 if the input machine attributes is valid or one of the following for invalid:
             1 if has no one input alphabet detected
             2 if has no one tape alphabet detected
             3 if has no one blank symbol detected
@@ -106,7 +135,7 @@ class TuringMachine(object):
             return 8
         return 0
 
-    def print_information(self):
+    def _print_information(self):
         print('======= About this Turing machine =======')
         print('Input alphabet: ', self.input_alphabet)
         print('Tape alphabet: ', self.tape_alphabet)
@@ -115,16 +144,24 @@ class TuringMachine(object):
         print('Initial state: ', self.init_state)
         print('Final states: ', self.final_states)
         print('Quantity of tapes', self.qnt_tapes)
+        print('Initial tape content', self.tape_content)
         print('=========================================')
         print('\n\n')
 
-    def aply_transition(self, transition, tape):
-        new_tape = copy(tape)
+    def _apply_transition(self, transition, tape):
+        """
+        Copies the tape and apply the transition in the new tape, generating
+        than a new configuration that the function returns.
+        """
+        new_tape = deepcopy(tape)
         new_tape.write(transition[3])
         new_tape.move(transition[4])
         return [new_tape, transition[1]]
 
-    def valid_transitions(self, state, tape):
+    def _valid_transitions(self, state, tape):
+        """
+        Returns a list of valid transitions as of given state
+        """
         valid_transitions = []
         for transiction in self.transictions:
             if transiction[0] == state:
