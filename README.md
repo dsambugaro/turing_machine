@@ -12,7 +12,7 @@ $ python jflap-turing2utfpr.py <Input_file>.jff <output_file>.txt
 Then executes the main.py file, giving the <output_file>.txt and the initial tape content of Turing machine:
 
 ```
-$ python main.py <output_file>.txt <tape_content>
+$ python main.py <output_file>.txt <initial_tape_content>
 ```
 
 If the turning computing reaches 500 iterations the program asks if you want to continue the computation. If 'y', 'Y', 's' or 'S' is given, the limit of iterations is doubled and the Turing computing continues otherwise the Turing computing is ended and prints every configuration in the queue.
