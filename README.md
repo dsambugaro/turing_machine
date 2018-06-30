@@ -40,3 +40,12 @@ Checks if the machine attributes are correct with the function validate_input
 
 ### Tape class
 Simulates a tape of Turing machine. Has methods that simulate the movements of the tape (left, right or stay), reads and writes on the tape. When the reading head passes one of the extremities of the tape one blank symbol is added. This way the tape keep being infinite.
+
+# Participating students:
+Danilo Sambugaro -- [@dsambugaro](https://github.com/dsambugaro)
+
+Darlan Andrade -- [@flame3br](https://github.com/flame3br)
+
+Rafael Soratto -- [@sorattorafa](https://github.com/sorattorafa)
+
+Pedro Perozin -- [@PedroPerozin](https://github.com/PedroPerozin)
