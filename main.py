@@ -38,9 +38,9 @@ class Maincontroller(object):
         """
         validate()
 
-        Input format validation.
+        Input file validation.
 
-        returns 0 if the input format is valid or one of the following for invalid:
+        returns 0 if the input file is valid or one of the following for invalid:
             1 if has no one input alphabet detected
             2 if has no one tape alphabet detected
             3 if has no one blank symbol detected
@@ -56,7 +56,7 @@ class Maincontroller(object):
         """
         Initialize the computing of Turing machine
         """
-        self._turing_machine.initialize_computing()
+        self._turing_machine.execute_Turing_computing()
 
 def main():
     """
